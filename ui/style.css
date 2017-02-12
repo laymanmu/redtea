@@ -1,0 +1,66 @@
+
+html, body {
+  background-color: #111;
+  font-family: monospace;
+  font-size: 17px;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+#room {
+  color: #eee;
+  margin: 5px;
+  width: 800px;
+}
+
+#roomName {
+  color: #ffffaa;
+}
+
+#roomDesc {
+  color: #ababff;
+}
+
+#roomGates {
+}
+
+.roomGate {
+  color: #abffab;
+  border-bottom: 1px solid #abffab;
+}
+
+#roomMobs {
+}
+
+.roomMob {
+  color: #ffabab;
+  border-bottom: 1px solid #ffabab;
+}
+
+#roomItems {
+}
+
+.roomItem {
+  color: #c8c8de;
+  border-bottom: 1px solid #c8c8de;
+}
+
+#output {
+  color: #aaa;
+  height: 200px;
+  overflow: auto;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+#input {
+  background-color: #cecece;
+  width: 100%;
+  margin: 0;
+  padding: 5px;
+  font-family: monospace;
+  border: 1px solid black;
+}
