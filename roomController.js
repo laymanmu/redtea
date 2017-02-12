@@ -5,7 +5,7 @@ var RoomController = {
     return {name:name, desc:'Pitch black.', mobs:[], items:[], gates:[]};
   },
 
-  remoteUserFromRoom: function(user, room) {
+  removeUserFromRoom: function(user, room) {
   }
 
 };

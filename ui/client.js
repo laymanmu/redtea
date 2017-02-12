@@ -6,6 +6,7 @@ var Client = {
 		Client.initUI();
     Client.initEvents();
     Client.ui.input.focus();
+    Messenger.init();
   },
 
   initUI: function() {

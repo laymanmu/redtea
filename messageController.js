@@ -17,7 +17,7 @@ var MessageController = {
       user.socket.on('disconnect', function() {
         MessageController.sendToAll('chat', `goodbye, ${user.name}`);
         RoomController.removeUserFromRoom(user, room);
-        UserController.removeUser(user);
+        UserController.deleteUser(user);
       });
 
       user.socket.on('chat', function(msg) {
