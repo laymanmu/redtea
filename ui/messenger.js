@@ -11,18 +11,23 @@ var Messenger = {
     Client.print(msg);
   },
 
-  onRoom: function(msg) {
-    for (key in msg) {
-      var element = "room";
-      switch(key) {
-        case "name":  element += "Name";break;
-        case "desc":  element += "Desc";break;
-        case "gates": element += "Gates";break;
-        case "mobs":  element += "Mobs";break;
-        case "items": element += "Items";break;
+  onRoom: function(room) {
+    console.log(`onRoom room: ${JSON.stringify(room)}`)
+
+    var toList = function(klass, values) {
+      var html = "";
+      for (var i=0; i<values.length; i++) {
+        html += `<span class='${klass}'>${values[i]}</span>`;
+        if (i<values.length-1)  html += ', ';
       }
-      Client.ui[element].innerHTML = msg[key];
-    }
+      return html;
+    };
+
+    Client.ui.roomName.innerHTML  = room.name;
+    Client.ui.roomDesc.innerHTML  = room.desc;
+    Client.ui.roomItems.innerHTML = `items: ${toList('roomItem', room.items)}`;
+    Client.ui.roomMobs.innerHTML  = `mobs:  ${toList('roomMob',  room.mobs)}`;
+    Client.ui.roomGates.innerHTML = `gates: ${toList('roomGate', room.gates)}`;
   }
 
 };

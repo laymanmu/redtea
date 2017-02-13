@@ -1,6 +1,6 @@
 
 var RoomController = require('./roomController');
-var UserController = require('./userController');
+var MobController  = require('./mobController');
 
 var MessageController = {
 
@@ -8,26 +8,30 @@ var MessageController = {
     MessageController.socket = io;
 
     MessageController.socket.on('connection', function(socket) {
-      var user = UserController.createUser(socket);
-      var room = RoomController.getRoom('Starting Room');
+      var mob = MobController.createMob(socket);
+      MessageController.sendToAll('chat', `hello, ${mob.name}`);
 
-      MessageController.sendToUser(user, 'room', room);
-      MessageController.sendToAll('chat', `hello, ${user.name}`);
+      RoomController.addMobToRoom(mob, {name:'Starting Room'})
 
-      user.socket.on('disconnect', function() {
-        MessageController.sendToAll('chat', `goodbye, ${user.name}`);
-        RoomController.removeUserFromRoom(user, room);
-        UserController.deleteUser(user);
+      mob.socket.on('disconnect', function() {
+        MessageController.sendToAll('chat', `goodbye, ${mob.name}`);
+        MobController.deleteMob(mob);
       });
 
-      user.socket.on('chat', function(msg) {
-        MessageController.sendToAll('chat', `${user.name} says: ${msg}`);
+      mob.socket.on('chat', function(msg) {
+        MessageController.sendToAll('chat', `${mob.name} says: ${msg}`);
       })
     });
   },
 
-  sendToUser: function(user, type, msg) {
-    user.socket.emit(type, msg);
+  sendToMob: function(mobName, type, msg) {
+    var mob = MobController.mobs[mobName];
+    if (mob) {
+      console.log(mob);
+      mob.socket.emit(type, msg);
+    } else {
+      console.log(`sendToMob() mobName does not exist: ${mobName}`);
+    }
   },
 
   sendToAll: function(type, msg) {
