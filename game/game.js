@@ -4,7 +4,9 @@ var Game = {
   init() {
     Game.ticks    = 0;
     Game.tickTime = 3000;
-    new Game.Room("Cell", "A cell.");
+    var cell = new Game.Room("Cell", "A cell.");
+    var hall = new Game.Room("Hall", "A hall.");
+    var gate = new Game.Gate(cell.id, hall.id);
   },
 
   tick() {

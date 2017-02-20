@@ -6,6 +6,16 @@ var Indexer = {
     gates: {}
   },
 
+  getMobsRoomId(mobId) {
+    return Indexer.data.mobs[mobId].roomId;
+  },
+  getMobIdsInRoom(roomId) {
+    return Indexer.data.rooms[roomId].mobs;
+  },
+  getGateIdsInRoom(roomId) {
+    return Indexer.data.rooms[roomId].gates;
+  },
+
   addMob(mobId, roomId="1") {
     Indexer.data.mobs[mobId] = {roomId:roomId};
     Indexer.addToList(mobId, Indexer.data.rooms[roomId].mobs);

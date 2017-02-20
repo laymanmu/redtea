@@ -2,6 +2,8 @@
 var Entity  = require('./entity');
 var Tracker = require('./entityTracker');
 var Indexer = require('./indexer');
+var Mob     = require('./mob');
+var Gate    = require('./gate');
 
 class Room extends Entity {
   constructor(name, desc) {
@@ -14,23 +16,38 @@ class Room extends Entity {
     return this.data.desc;
   }
 
-  static getFullRoom(roomId="1") {
+  static getFullRoomMessage(roomId="1") {
     if (Room.cache[roomId]) {
       return Room.cache[roomId];
     }
-    var room = Room.get(roomId);
-    var msg  = {
+    var room  = Room.get(roomId);
+    var mobs  = [];
+    var gates = [];
+
+    for (let mobId of Indexer.getMobIdsInRoom(roomId)) {
+      var mob = Mob.get(mobId);
+      var msg = {name:mob.name, id:mob.id};
+      mobs.push(msg);
+    }
+    for (let gateId of Indexer.getGateIdsInRoom(roomId)) {
+      var gate = Gate.get(gateId);
+      var msg  = {name:gate.name, id:gate.id};
+      gates.push(msg);
+    }
+
+
+    var msg   = {
       name:   room.name,
       desc:   room.desc,
-      mobs:   [],
-      items: [],
-      gates:  []
+      mobs:   mobs,
+      gates:  gates,
+      items:  []
     }
     Room.cache.rooms[roomId] = msg;
     return msg;
   }
   static rebuildCache() {
-    Room.cache = {rooms:[]};
+    Room.cache = {rooms:{}};
   }
 
   static get rooms() {
