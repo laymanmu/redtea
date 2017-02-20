@@ -1,28 +1,23 @@
 
-var Mob     = require('./mob');
-var Room    = require('./room');
-var Gate    = require('./gate');
-var Indexer = require('./indexer');
+var Mob       = require('./mob');
+var Room      = require('./room');
+var Gate      = require('./gate');
+var Indexer   = require('./indexer');
+var Messenger = require('./messenger');
 
 var Game = {
-  init() {
+  init(io) {
     Game.ticks    = 0;
-    Game.tickTime = 2000;
-    Game.isInitialized = true;
+    Game.tickTime = 3000;
+    new Room("Cell", "A cell.");
+    Messenger.init(io);
   },
 
   tick() {
-    Game.ticks++;
-    console.log(`tick ${Game.ticks}`);
-    console.log(Room.rooms);
-    console.log(Gate.gates);
-    console.log(Mob.mobs);
-    console.log("Indexer.data:");
-    console.log(JSON.stringify(Indexer.data, null, 2));
-    console.log('');
+    console.log(JSON.stringify(Indexer.data));
   },
+
   start() {
-    if (!Game.isInitialized) Game.init();
     Game.tick();
     Game.intervalId = setInterval(Game.tick, Game.tickTime);
   },
@@ -31,8 +26,9 @@ var Game = {
   }
 }
 
-Game.Mob     = Mob;
-Game.Room    = Room;
-Game.Gate    = Gate;
-Game.Indexer = Indexer;
+Game.Mob       = Mob;
+Game.Room      = Room;
+Game.Gate      = Gate;
+Game.Indexer   = Indexer;
+Game.Messenger = Messenger;
 module.exports = Game;

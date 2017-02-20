@@ -5,12 +5,14 @@ var app     = express();
 var http    = require('http').Server(app);
 var io      = require('socket.io')(http);
 var logger  = require('morgan');
+var Game    = require('./game/game');
 
-require('./messageController').init(io);
+Game.init(io);
 
-app.use(express.static('../client'));
+app.use(express.static('client'));
 app.use(logger('dev'));
 
 http.listen(port, function() {
   console.log("listening on *:"+ port);
+  Game.start();
 });

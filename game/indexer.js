@@ -11,6 +11,7 @@ var Indexer = {
     Indexer.addToList(mobId, Indexer.data.rooms[roomId].mobs);
   },
   removeMob(mobId) {
+    var fromRoomId = Indexer.data.mobs[mobId].roomId;
     Indexer.removeFromList(mobId, Indexer.data.rooms[fromRoomId].mobs);
     delete Indexer.data.mobs[mobId];
   },
