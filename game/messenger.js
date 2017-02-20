@@ -12,8 +12,15 @@ var Messenger = {
     Messenger.socket.on('connection', function(socket) {
       var mob = new Mob();
       Messenger.sockets[mob.id] = socket;
-      socket.emit('room', Room.getFullRoomMessage(Indexer.getMobsRoomId(mob.id)));
       Messenger.socket.emit('chat', `welcome, ${mob.name}`);
+
+      var roomId  = Indexer.getMobsRoomId(mob.id);
+      var mobIds  = Indexer.getMobIdsInRoom(roomId);
+      var roomMsg = Room.getFullRoomMessage(roomId);
+
+      for (let mobId of mobIds) {
+        Messenger.sendToOne(mobId, 'room', roomMsg);
+      }
 
       socket.on('disconnect', function() {
         Mob.remove(mob.id);

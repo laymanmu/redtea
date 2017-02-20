@@ -23,7 +23,7 @@ class Room extends Entity {
     var room  = Room.get(roomId);
     var mobs  = [];
     var gates = [];
-
+    var items = [];
     for (let mobId of Indexer.getMobIdsInRoom(roomId)) {
       var mob = Mob.get(mobId);
       var msg = {name:mob.name, id:mob.id};
@@ -34,20 +34,20 @@ class Room extends Entity {
       var msg  = {name:gate.name, id:gate.id};
       gates.push(msg);
     }
-
-
-    var msg   = {
+    var msg = {
       name:   room.name,
       desc:   room.desc,
       mobs:   mobs,
       gates:  gates,
-      items:  []
-    }
+      items:  items
+    };
     Room.cache.rooms[roomId] = msg;
     return msg;
   }
-  static rebuildCache() {
-    Room.cache = {rooms:{}};
+
+  static updateCache() {
+    if (!Room.cache) Room.cache = {rooms:{}};
+    Room.cache.rooms = {};
   }
 
   static get rooms() {
@@ -62,6 +62,6 @@ class Room extends Entity {
   }
 }
 
-Room.rebuildCache();
+Room.updateCache();
 Room.Tracker   = new Tracker();
 module.exports = Room;
