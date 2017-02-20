@@ -1,6 +1,5 @@
 
 var mongodb = require('mongodb').MongoClient;
-var assert  = require('assert');
 
 var Database = {
   url: 'mongodb://localhost:27017/redtea',
@@ -25,8 +24,8 @@ var Database = {
     console.log(`Database.upsert type: ${type}, data: ${JSON.stringify(data)}`);
     Database.open(function(db) {
       var collection = db.collection(type);
-      var query      = {_id:data._id};
-      collection.updateOne(query, {$set:data}, {upsert:true}, function(err) {
+      var query      = {id:data.id};
+      collection.updateOne(query, {"$set":data}, {upsert:true}, function(err) {
         if (err) throw err;
         if (callback) callback();
       });

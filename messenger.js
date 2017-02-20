@@ -15,12 +15,13 @@ var MessageController = {
 
       mob.socket.on('disconnect', function() {
         MessageController.sendToAll('chat', `goodbye, ${mob.name}`);
-        MobController.deleteMob(mob);
+        RoomController.removeMobFromRoom(mob.name);
+        MobController.deleteMob(mob.name);
       });
 
       mob.socket.on('chat', function(msg) {
         MessageController.sendToAll('chat', `${mob.name} says: ${msg}`);
-      })
+      });
     });
   },
 

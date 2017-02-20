@@ -8,7 +8,7 @@ var logger  = require('morgan');
 
 require('./messageController').init(io);
 
-app.use(express.static('ui'));
+app.use(express.static('../client'));
 app.use(logger('dev'));
 
 http.listen(port, function() {
