@@ -10,6 +10,29 @@ class Room extends Entity {
     Room.Tracker.add(this);
     Indexer.addRoom(this.id);
   }
+  get desc() {
+    return this.data.desc;
+  }
+
+  static getFullRoom(roomId="1") {
+    if (Room.cache[roomId]) {
+      return Room.cache[roomId];
+    }
+    var room = Room.get(roomId);
+    var msg  = {
+      name:   room.name,
+      desc:   room.desc,
+      mobs:   [],
+      items: [],
+      gates:  []
+    }
+    Room.cache.rooms[roomId] = msg;
+    return msg;
+  }
+  static rebuildCache() {
+    Room.cache = {rooms:[]};
+  }
+
   static get rooms() {
     return Room.Tracker.entities;
   }
@@ -22,5 +45,6 @@ class Room extends Entity {
   }
 }
 
+Room.rebuildCache();
 Room.Tracker   = new Tracker();
 module.exports = Room;

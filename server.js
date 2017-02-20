@@ -7,7 +7,8 @@ var io      = require('socket.io')(http);
 var logger  = require('morgan');
 var Game    = require('./game/game');
 
-Game.init(io);
+Game.init();
+Game.Messenger.init(io);
 
 app.use(express.static('client'));
 app.use(logger('dev'));
