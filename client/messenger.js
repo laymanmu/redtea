@@ -21,6 +21,10 @@ var Messenger = {
     Client.print(`got user msg: ${JSON.stringify(msg)}`);
   },
 
+  onStatus(msg) {
+    Client.print(msg);
+  },
+
   onRoom(room) {
     Client.room = room;
 
