@@ -5,14 +5,24 @@ var Messenger = {
     Messenger.socket = io();
     Messenger.socket.on('chat', Messenger.onChat);
     Messenger.socket.on('room', Messenger.onRoom);
+    Messenger.socket.on('user', Messenger.onUser);
+  },
+
+  sendMsg(type, msg) {
+    Messenger.socket.emit(type, msg);
   },
 
   onChat(msg) {
     Client.print(msg);
   },
 
+  onUser(msg) {
+    Client.user = msg;
+    Client.print(`got user msg: ${JSON.stringify(msg)}`);
+  },
+
   onRoom(room) {
-    console.log(`onRoom room: ${JSON.stringify(room)}`)
+    Client.room = room;
 
     var itemNames = [];
     var mobNames  = [];

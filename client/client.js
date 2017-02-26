@@ -1,6 +1,8 @@
 
 var Client = {
   mouse: {clientX:0, clientY:0, pageX:0, pageY:0},
+  room: {},
+  user: {},
 
   init: function() {
 		Client.initUI();

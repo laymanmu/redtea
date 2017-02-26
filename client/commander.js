@@ -1,7 +1,12 @@
 
 var Commander = {
   cmdHistory: {cmds:[], pos:0, partial:""},
-  commands:   {},
+
+  addToHistory: function(cmdString) {
+    Commander.cmdHistory.cmds.push(cmdString);
+    Commander.cmdHistory.pos     = Commander.cmdHistory.cmds.length;
+    Commander.cmdHistory.partial = "";
+  },
 
   onPrevHistory: function() {
     // no commands in the history or already at the oldest command? - do nothing:
@@ -33,20 +38,34 @@ var Commander = {
 
   runCommand: function(cmdString) {
     if (!cmdString || cmdString.length==0) return;
-
-    // update command history:
-    Commander.cmdHistory.cmds.push(cmdString);
-    Commander.cmdHistory.pos     = Commander.cmdHistory.cmds.length;
-    Commander.cmdHistory.partial = "";
-
-    // split the trimmed command string into a command & a parm:
+    Commander.addToHistory(cmdString);
     var trimmed  = cmdString.trim();
     var spacePos = trimmed.indexOf(' ');
     var command  = spacePos>0 ? trimmed.substr(0,spacePos) : trimmed;
-    var parm     = spacePos>0 ? trimmed.substr(spacePos+1) : "";
-    var cmdData  = {command:command, parm:parm};
+    var parms    = spacePos>0 ? trimmed.substr(spacePos+1).split(/\s+/) : [];
+    for (let cmdName in Commander.commands) {
+      if (command == cmdName) {
+        var cmdFunction = Commander.commands[cmdName];
+        cmdFunction(parms);
+      }
+    }
+  },
 
-    // for now just print the data:
-    Client.print(JSON.stringify(cmdData));
+  commands: {
+    cd: function(parms) {
+      var gateName = parms[0];
+      var foundGate = false;
+      for (let gate of Client.room.gates) {
+        if (gate.name == gateName) {
+          Messenger.sendMsg('cd', {gateId:gate.id});
+          foundGate = true;
+          break;
+        }
+      }
+      if (!foundGate) {
+        var gatesString = JSON.stringify(Client.room.gates);
+        Client.print(`couldn't find gate:\"${gateName}\" in gates:${gatesString}`);
+      }
+    }
   }
 };
