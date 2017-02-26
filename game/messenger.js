@@ -10,22 +10,16 @@ var Messenger = {
   init: function(io) {
     Messenger.socket = io;
     Messenger.socket.on('connection', function(socket) {
-      var mob = new Mob();
-      Messenger.sockets[mob.id] = socket;
-      Messenger.socket.emit('chat', `welcome, ${mob.name}`);
-
+      var mob     = new Mob();
       var roomId  = Indexer.getMobsRoomId(mob.id);
-      var mobIds  = Indexer.getMobIdsInRoom(roomId);
-      var roomMsg = Room.getFullRoomMessage(roomId);
-
-      for (let mobId of mobIds) {
-        Messenger.sendToOne(mobId, 'room', roomMsg);
-      }
-
+      Messenger.sockets[mob.id] = socket;
+      Messenger.sendToAll(mob.id, 'chat', `welcome, ${mob.name}`);
+      Messenger.sendToRoom(roomId, 'room', Room.getFullRoomMessage(roomId));
       socket.on('disconnect', function() {
         Mob.remove(mob.id);
-        Messenger.socket.emit('chat', `goodbye, ${mob.name}`);
         delete Messenger.sockets[mob.id];
+        Messenger.sendToAll('chat', `goodbye, ${mob.name}`);
+        Messenger.sendToRoom(roomId, 'room', Room.getFullRoomMessage(roomId));
       });
       socket.on('chat', function(msg) {
         Messenger.sendToAll('chat', msg);
@@ -41,6 +35,13 @@ var Messenger = {
 
   sendToAll: function(type, msg) {
     Messenger.socket.emit(type, msg);
+  },
+
+  sendToRoom: function(roomId, type, msg) {
+    var mobIds = Indexer.getMobIdsInRoom(roomId);
+    for (let mobId of mobIds) {
+      Messenger.sendToOne(mobId, type, msg);
+    }
   }
 };
 
