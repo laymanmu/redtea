@@ -13,7 +13,7 @@ var Messenger = {
       var mob     = new Mob();
       var roomId  = Indexer.getMobsRoomId(mob.id);
       Messenger.sockets[mob.id] = socket;
-      Messenger.sendToAll(mob.id, 'chat', `welcome, ${mob.name}`);
+      Messenger.sendToAll('chat', `welcome, ${mob.name}`);
       Messenger.sendToRoom(roomId, 'room', Room.getFullRoomMessage(roomId));
       socket.on('disconnect', function() {
         Mob.remove(mob.id);
