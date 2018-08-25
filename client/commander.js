@@ -51,7 +51,9 @@ var Commander = {
       }
     }
     if (!found) {
-      Client.print(`couldn't find command \"${command}\" from: \"${cmdString}\"`);
+      Client.print(`couldn't find command \"${command}\" from input: \"${cmdString}\"`);
+      let commandList = Object.keys(Commander.commands).join(", ");
+      Client.print(`try one of: ${commandList}`);
     }
   },
 
